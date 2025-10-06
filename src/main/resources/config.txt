@@ -1,2 +1,3 @@
-example.com 127.0.0.1
+fadeev.com 127.0.0.1
+www.fadeev.com 127.0.0.1
 #ya.ru 127.0.0.1
