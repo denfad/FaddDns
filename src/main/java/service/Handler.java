@@ -11,10 +11,11 @@ import java.util.Optional;
 
 public class Handler {
     private final List<DNSRecord> records;
-    private static final String UPSTREAM_DNS = "8.8.8.8";
+    private final DNSClient dnsClient;
 
     public Handler(List<DNSRecord> records) {
         this.records = records;
+        this.dnsClient = new DNSClient();
     }
 
     public byte[] handle(byte[] requestData) {
@@ -25,9 +26,9 @@ public class Handler {
         // если не нашли у себя домен, то перенаправляем к вышестоящему серверу
         if(responseMessage.getAnswerCount() == 0) {
             try {
-                return findInUpStream(requestData);
+                return dnsClient.makeRequest(requestData);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                System.err.println(e.getMessage());
             }
         }
         return responseMessage.toByteArray();
@@ -45,26 +46,6 @@ public class Handler {
         record.ifPresent(response::addAnswer);
 
         return response;
-    }
-
-    private byte[] findInUpStream(byte[] requestData) throws Exception{
-        // Создаем сокет для отправки запроса к вышестоящему DNS
-        DatagramSocket upstreamSocket = new DatagramSocket();
-        upstreamSocket.setSoTimeout(5000); // Таймаут 5 секунд
-
-        // Отправляем запрос к вышестоящему DNS-серверу
-        InetAddress upstreamAddress = InetAddress.getByName(UPSTREAM_DNS);
-        DatagramPacket upstreamRequest = new DatagramPacket(
-                requestData, requestData.length, upstreamAddress, 53
-        );
-        upstreamSocket.send(upstreamRequest);
-
-        // Получаем ответ от вышестоящего DNS-сервера
-        byte[] responseData = new byte[1024];
-        DatagramPacket upstreamResponse = new DatagramPacket(responseData, responseData.length);
-        upstreamSocket.receive(upstreamResponse);
-
-        return responseData;
     }
 
     private Optional<DNSRecord> findValue(DNSMessage requestMessage) {
