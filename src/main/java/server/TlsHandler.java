@@ -32,7 +32,6 @@ public class TlsHandler extends ProtocolHandler {
 
         try {
             initServerSocket();
-            System.out.println("DNS-over-TLS сервер запущен на порту " + port);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -40,6 +39,7 @@ public class TlsHandler extends ProtocolHandler {
 
     @Override
     public void run() {
+        System.out.println("DNS-over-TLS сервер запущен на порту " + port);
         while (!serverSocket.isClosed()) {
             try {
                 SSLSocket clientSocket = (SSLSocket) serverSocket.accept();
