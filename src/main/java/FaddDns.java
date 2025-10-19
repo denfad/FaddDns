@@ -1,14 +1,10 @@
-import common.DNSRecord;
-import config.Configurator;
-import server.Server;
-import service.Handler;
 
-import java.io.IOException;
-import java.util.List;
+import config.Configurator;
+
+import server.DnsServer;
+
 
 public class FaddDns {
-
-    private static final int DNS_PORT = 53;
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -16,16 +12,7 @@ public class FaddDns {
             return;
         }
 
-        try {
-            Configurator configurator = new Configurator();
-            List<DNSRecord> records = configurator.parseConfiguration(args[0]);
-
-            Handler handler = new Handler(records);
-
-            Server server = new Server(handler, DNS_PORT);
-            server.run();
-        } catch (IOException e) {
-            System.err.println("Unable to read config file: " + e.getMessage());
-        }
+        var server = DnsServer.initFromConfiguration(Configurator.loadConfig(args[0]));
+        server.start();
     }
 }
