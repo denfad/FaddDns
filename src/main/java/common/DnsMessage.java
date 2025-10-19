@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-// Основной класс DNS сообщения
 public class DnsMessage {
     private int id;
     private DnsMessageType messageType;
@@ -21,14 +20,12 @@ public class DnsMessage {
     private List<DnsResourceRecord> authorityRecords = new ArrayList<>();
     private List<DnsResourceRecord> additionalRecords = new ArrayList<>();
 
-    // Конструктор для создания нового сообщения
     public DnsMessage(int id, DnsMessageType messageType, DnsOpCode opCode) {
         this.id = id;
         this.messageType = messageType;
         this.opCode = opCode;
     }
 
-    // Getters и Setters
     public int getId() { return id; }
     public DnsMessageType getMessageType() { return messageType; }
     public DnsOpCode getOpCode() { return opCode; }

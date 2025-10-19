@@ -1,6 +1,5 @@
 package common;
 
-// Класс для DNS ресурсной записи
 public class DnsResourceRecord {
     private String name;
     private DnsRecordType type;

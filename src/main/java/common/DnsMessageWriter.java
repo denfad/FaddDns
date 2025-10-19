@@ -1,9 +1,7 @@
 package common;
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DnsMessageWriter {
     private static final int BUFFER_SIZE = 1024;
@@ -23,10 +21,8 @@ public class DnsMessageWriter {
     }
 
     private static void writeHeader(ByteBuffer buffer, DnsMessage message) {
-        // ID
         buffer.putShort((short) message.getId());
 
-        // Flags
         int flags = 0;
         flags |= (message.getMessageType().getValue() & 0x1) << 15; // QR
         flags |= (message.getOpCode().getValue() & 0xF) << 11;      // OPCODE
@@ -34,12 +30,10 @@ public class DnsMessageWriter {
         flags |= (message.isTruncated() ? 1 : 0) << 9;              // TC
         flags |= (message.isRecursionDesired() ? 1 : 0) << 8;       // RD
         flags |= (message.isRecursionAvailable() ? 1 : 0) << 7;     // RA
-        // 3 бита зарезервированы (Z)
         flags |= (message.getResponseCode().getValue() & 0xF);      // RCODE
 
         buffer.putShort((short) flags);
 
-        // Counts
         buffer.putShort((short) message.getQuestions().size());
         buffer.putShort((short) message.getAnswers().size());
         buffer.putShort((short) message.getAuthorityRecords().size());

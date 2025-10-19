@@ -1,6 +1,5 @@
 package common;
 
-// ENUM для типа DNS операции
 public enum DnsOpCode {
     QUERY(0),
     IQUERY(1),

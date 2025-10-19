@@ -1,6 +1,5 @@
 package common;
 
-// ENUM для кода ответа
 public enum DnsResponseCode {
     NO_ERROR(0),
     NOT_FOUND(3);

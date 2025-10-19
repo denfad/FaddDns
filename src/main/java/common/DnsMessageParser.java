@@ -9,6 +9,8 @@ public class DnsMessageParser {
         DnsMessage message = parseHeader(buffer);
 
         int questionCount = buffer.getShort() & 0xFFFF;
+
+        // TODO parse resource records
         int anCount = buffer.getShort() & 0xFFFF;
         int nsCount = buffer.getShort() & 0xFFFF;
         int arCount = buffer.getShort() & 0xFFFF;
