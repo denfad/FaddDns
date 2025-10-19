@@ -16,4 +16,9 @@ public class DnsQuestion {
     public String getName() { return name; }
     public DnsRecordType getType() { return type; }
     public DnsRecordClass getRecordClass() { return recordClass; }
+
+    @Override
+    public String toString() {
+        return String.format("question(type=%s, name=%s)", type, name);
+    }
 }

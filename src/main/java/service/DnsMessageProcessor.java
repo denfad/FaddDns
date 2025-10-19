@@ -21,7 +21,7 @@ public class DnsMessageProcessor {
             var answers = processQuestion(question);
 
             if(answers.isEmpty()) {
-                DnsMessageBuilder.createErrorResponse(request, DnsResponseCode.NOT_FOUND);
+                return DnsMessageBuilder.createErrorResponse(request, DnsResponseCode.NOT_FOUND);
             } else {
                 answers.forEach(response::addAnswer);
             }

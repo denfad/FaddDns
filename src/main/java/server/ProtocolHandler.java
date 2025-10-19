@@ -1,22 +1,43 @@
 package server;
 
-import common.DnsMessage;
-import common.DnsMessageBuilder;
-import common.DnsMessageParser;
+import common.*;
 import config.HandlersConfig;
 import service.DnsMessageProcessor;
+import service.upstream.UpstreamServer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ProtocolHandler {
     private final DnsMessageProcessor processor;
+    private final List<UpstreamServer> upstreamServers = new ArrayList<>();
 
     public ProtocolHandler(DnsMessageProcessor processor) {
         this.processor = processor;
     }
 
-    protected final DnsMessage processRequest(byte[] dnsMessage) {
+    public void addUpstreamServer(UpstreamServer server) {
+        upstreamServers.add(server);
+    }
+
+    protected final byte[] processRequest(byte[] dnsMessage) {
         DnsMessage request = DnsMessageParser.parse(dnsMessage);
-        System.out.printf("Handle request: %s%n", request.getQuestions().get(0).getName());
-        return processor.processRequest(request);
+        System.out.printf("Handle request: %s \n", request);
+
+        var response = processor.processRequest(request);
+
+        // если не нашли в локальном хранилище
+        if(response.getResponseCode() == DnsResponseCode.NOT_FOUND) {
+            for(UpstreamServer server: upstreamServers) {
+                try {
+                    return server.processRequest(dnsMessage);
+                } catch (Exception e) {
+                    // ignore, next server
+                }
+            }
+        }
+
+        return DnsMessageWriter.write(response);
     }
 
     protected abstract void start();

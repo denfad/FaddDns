@@ -51,8 +51,7 @@ public class UdpHandler extends ProtocolHandler {
 
     private void parseAndExecuteRequest(DatagramSocket socket, DatagramPacket requestPacket) {
         byte[] requestData = requestPacket.getData();
-        DnsMessage response = processRequest(requestData);
-        byte[] responseData = DnsMessageWriter.write(response);
+        byte[] responseData = processRequest(requestData);
 
         DatagramPacket responsePacket = new DatagramPacket(
                 responseData,

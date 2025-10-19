@@ -2,6 +2,7 @@ package common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 // Основной класс DNS сообщения
@@ -76,5 +77,15 @@ public class DnsMessage {
 
     public void addAdditionalRecord(DnsResourceRecord record) {
         additionalRecords.add(record);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "message(type=%s, questions={%s})",
+                messageType,
+                questions.stream()
+                        .map(DnsQuestion::toString)
+                        .collect(Collectors.joining(",")));
     }
 }
