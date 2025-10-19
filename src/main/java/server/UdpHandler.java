@@ -25,7 +25,7 @@ public class UdpHandler extends ProtocolHandler {
     }
 
     @Override
-    protected void start() {
+    public void run() {
         try (DatagramSocket socket = new DatagramSocket(port)) {
             System.out.println("UDP Server started on port " + port);
             while (true) {

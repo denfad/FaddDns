@@ -8,7 +8,7 @@ import service.upstream.UpstreamServer;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ProtocolHandler {
+public abstract class ProtocolHandler implements Runnable{
     private final DnsMessageProcessor processor;
     private final List<UpstreamServer> upstreamServers = new ArrayList<>();
 
@@ -39,6 +39,4 @@ public abstract class ProtocolHandler {
 
         return DnsMessageWriter.write(response);
     }
-
-    protected abstract void start();
 }

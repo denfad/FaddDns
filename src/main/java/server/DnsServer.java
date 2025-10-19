@@ -21,7 +21,7 @@ public class DnsServer {
 
     public void start() {
         for(ProtocolHandler handler: handlers) {
-            handler.start();
+            new Thread(handler).start();
         }
     }
 
@@ -36,6 +36,14 @@ public class DnsServer {
             // adding upstreams
             upstreams.forEach(udpHandler::addUpstreamServer);
             server.addProtocolHandler(udpHandler);
+        }
+
+        // TLS handler
+        if(config.getHandlers().getTls() != null) {
+            var tlsHandler = TlsHandler.initFromConfig(processor, config.getHandlers().getTls());
+            // adding upstreams
+            upstreams.forEach(tlsHandler::addUpstreamServer);
+            server.addProtocolHandler(tlsHandler);
         }
 
         return server;

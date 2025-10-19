@@ -2,6 +2,12 @@ handlers:
   udp:
     port: 53
     threadsPoolSize: 10
+  tls:
+    port: 853
+    threadsPoolSize: 10
+    keyStorePath: "keystore.jks"
+    keyStorePassword: test123
+    keyPassword: test123
 
 upstreams:
   values:
