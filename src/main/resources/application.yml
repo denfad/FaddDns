@@ -2,6 +2,9 @@ handlers:
   udp:
     port: 53
     threadsPoolSize: 10
+  tcp:
+    port: 53
+    threadsPoolSize: 10
   tls:
     port: 853
     threadsPoolSize: 10
