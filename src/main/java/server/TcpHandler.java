@@ -1,13 +1,9 @@
 package server;
 
 import config.TcpHandlerConfig;
-import config.UdpHandlerConfig;
 import service.DnsMessageProcessor;
 
-import javax.net.ssl.SSLSocket;
 import java.io.*;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -22,6 +18,11 @@ public class TcpHandler extends ProtocolHandler {
 
         this.port = config.getPort();
         this.executorService = Executors.newFixedThreadPool(config.getThreadsPoolSize());
+    }
+
+    @Override
+    public Protocol getProtocol() {
+        return Protocol.TCP;
     }
 
     @Override

@@ -16,11 +16,14 @@ public abstract class ProtocolHandler implements Runnable{
         this.processor = processor;
     }
 
+    public abstract Protocol getProtocol();
+
     public void addUpstreamServer(UpstreamServer server) {
         upstreamServers.add(server);
     }
 
     protected final byte[] processRequest(byte[] dnsMessage) {
+        System.out.println("Receive request on " + getProtocol() + " handler");
         try {
             DnsMessage request = DnsMessageParser.parse(dnsMessage);
             System.out.printf("Handle request: %s \n", request);

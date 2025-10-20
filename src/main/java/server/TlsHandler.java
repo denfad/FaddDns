@@ -38,6 +38,11 @@ public class TlsHandler extends ProtocolHandler {
     }
 
     @Override
+    public Protocol getProtocol() {
+        return Protocol.TLS;
+    }
+
+    @Override
     public void run() {
         System.out.println("DNS-over-TLS сервер запущен на порту " + port);
         while (!serverSocket.isClosed()) {
