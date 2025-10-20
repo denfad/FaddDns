@@ -34,6 +34,8 @@ public abstract class ProtocolHandler implements Runnable{
 
             return DnsMessageWriter.write(response);
         } catch (Exception e) {
+            // В случае любых ошибок (парсинга и т.п.) пересылаем вышестоящим серверам,
+            // надеясь на то что они знаю что делать с запросом
             System.err.printf("Invalid message, use upstream \n");
             return processRequestInUpstream(dnsMessage);
         }
