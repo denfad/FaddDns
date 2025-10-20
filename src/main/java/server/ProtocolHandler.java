@@ -21,22 +21,33 @@ public abstract class ProtocolHandler implements Runnable{
     }
 
     protected final byte[] processRequest(byte[] dnsMessage) {
-        DnsMessage request = DnsMessageParser.parse(dnsMessage);
-        System.out.printf("Handle request: %s \n", request);
+        try {
+            DnsMessage request = DnsMessageParser.parse(dnsMessage);
+            System.out.printf("Handle request: %s \n", request);
+            var response = processor.processRequest(request);
 
-        var response = processor.processRequest(request);
+            // если не нашли в локальном хранилище
+            if (response.getResponseCode() == DnsResponseCode.NOT_FOUND) {
+                System.out.printf("Use upstream for request: %s \n", request);
+                return processRequestInUpstream(dnsMessage);
+            }
 
-        // если не нашли в локальном хранилище
-        if(response.getResponseCode() == DnsResponseCode.NOT_FOUND) {
-            for(UpstreamServer server: upstreamServers) {
-                try {
-                    return server.processRequest(dnsMessage);
-                } catch (Exception e) {
-                    // ignore, next server
-                }
+            return DnsMessageWriter.write(response);
+        } catch (Exception e) {
+            System.err.printf("Invalid message, use upstream \n");
+            return processRequestInUpstream(dnsMessage);
+        }
+    }
+
+    private byte[] processRequestInUpstream(byte[] dnsMessage) {
+        for (UpstreamServer server : upstreamServers) {
+            try {
+                return server.processRequest(dnsMessage);
+            } catch (Exception e) {
+                // ignore, next server
             }
         }
 
-        return DnsMessageWriter.write(response);
+        return dnsMessage;
     }
 }
