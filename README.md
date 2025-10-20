@@ -57,7 +57,7 @@ handlers:
 records:
   values:
     -
-      domain: example.com # Доменное имя
+      domain: fadeev.com # Доменное имя
       type: A # Тип
       values:
         - 127.0.0.1 # Список значений
