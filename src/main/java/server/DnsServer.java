@@ -38,6 +38,15 @@ public class DnsServer {
             server.addProtocolHandler(udpHandler);
         }
 
+        // TCP handler
+        if(config.getHandlers().getTcp() != null) {
+            var tcpHandler = TcpHandler.initFromConfig(processor, config.getHandlers().getTcp());
+            // adding upstreams
+            upstreams.forEach(tcpHandler::addUpstreamServer);
+            server.addProtocolHandler(tcpHandler);
+        }
+
+
         // TLS handler
         if(config.getHandlers().getTls() != null) {
             var tlsHandler = TlsHandler.initFromConfig(processor, config.getHandlers().getTls());

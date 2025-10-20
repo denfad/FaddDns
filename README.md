@@ -5,7 +5,7 @@
 
 ## Характеристики
 
-- **Поддержка протоколов**: UDP, DNS-over-TLS
+- **Поддержка протоколов**: UDP, TCP, DNS-over-TLS
 - **Хранилище записей**: Поддержка A и AAAA записи
 - **Рекурсивные запросы**: Интеграция с вышестоящими DNS-серверами
 - **Обработка**: возможность настройки многопоточной обработки
@@ -34,6 +34,14 @@ java -jar target/FaddDns-1.0.jar src/main/resources/application.yml
 handlers:
   udp:
     port: 53 # Стандартный порт DNS
+    threadsPoolSize: 10 # Размер пула потоков
+```
+
+#### TCP
+```yaml
+handlers:
+  tcp:
+    port: 53 # Стандартный порт TCP
     threadsPoolSize: 10 # Размер пула потоков
 ```
 
